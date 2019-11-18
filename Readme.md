@@ -1,7 +1,7 @@
 # Личный проект «Большое путешествие» [![Build status][travis-image]][travis-url]
 
 * Студент: [Георгий Гуров](https://up.htmlacademy.ru/ecmascript/10/user/581501).
-* Наставник: [Сергей Рубец](https://htmlacademy.ru/profile/amator)`.
+* Наставник: [Сергей Рубец](https://htmlacademy.ru/profile/amator).
 
 ---
 
