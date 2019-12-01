@@ -6,7 +6,7 @@ import {createFilter} from './components/filter.js';
 import {createSort} from './components/sort.js';
 import {createEventAddMenu} from './components/event-add-menu.js';
 import {createTripContainer} from './components/trip-container.js';
-import {createTripDays} from './components/trip-days.js';
+import {createTripDay} from './components/trip-days.js';
 import {createRouteData} from './mock/mockCardData.js';
 
 const tripMenu = document.querySelector(`.trip-main__trip-controls`);
@@ -20,12 +20,12 @@ renderMarkup(tripEvents, createSort(), `beforeend`);
 renderMarkup(tripEvents, createEventAddMenu(), `beforeend`);
 renderMarkup(tripEvents, createTripContainer(), `beforeend`);
 
-const tripDaysContainer = tripEvents.querySelector(`.trip-days`);
+const tripDaysContainer = tripEvents.querySelector(`.trip-events__list`);
 
 for (let i = 0; i < 3; i++) {
-  renderMarkup(tripDaysContainer, createTripDays(), `beforeend`);
+  renderMarkup(tripDaysContainer, createTripDay(createRouteData()), `beforeend`);
   // чтобы npm test не ругался
-  createRouteData();
+  console.log(createRouteData());
 }
 
 
