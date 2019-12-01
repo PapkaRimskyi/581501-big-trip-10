@@ -21,11 +21,10 @@ renderMarkup(tripEvents, createEventAddMenu(), `beforeend`);
 renderMarkup(tripEvents, createTripContainer(), `beforeend`);
 
 const tripDaysContainer = tripEvents.querySelector(`.trip-events__list`);
+const QUANTITY_OF_RENDER = 3;
 
-for (let i = 0; i < 3; i++) {
+for (let i = 0; i < QUANTITY_OF_RENDER; i++) {
   renderMarkup(tripDaysContainer, createTripDay(createRouteData()), `beforeend`);
-  // чтобы npm test не ругался
-  console.log(createRouteData());
 }
 
 

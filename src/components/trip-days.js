@@ -1,13 +1,39 @@
+const createExtraServicesMarkup = (servicesData) => {
+  if (servicesData.length !== 0) {
+    const servicesMarkupArray = [];
+    servicesData.map((item) => {
+      servicesMarkupArray.push(`<li class="event__offer">
+        <span class="event__offer-title">${item.description}</span>
+        &plus;
+        &euro;&nbsp;<span class="event__offer-price">${item.price}</span>
+      </li>
+        `
+      );
+    });
+    return servicesMarkupArray.join(` `);
+  }
+  return ``;
+};
+
+const getRandomWaypoint = (waypointCollection) => {
+  const randomRouteType = waypointCollection[Math.floor(Math.random() * waypointCollection.length)];
+  return (
+    `<div class="event__type">
+    <img class="event__type-icon" width="42" height="42" src="${randomRouteType.iconPath}" alt="Event type icon">
+  </div>
+  <h3 class="event__title">${randomRouteType.description}</h3>
+    `
+  );
+};
+
 export const createTripDay = (cardData) => {
-  const {estimatedTime, tripCost, extraServices} = cardData;
+  const {estimatedTime, tripCost, extraServices, waypoint} = cardData;
+
   return (
     `
   <li class="trip-events__item">
   <div class="event">
-    <div class="event__type">
-      <img class="event__type-icon" width="42" height="42" src="img/icons/taxi.png" alt="Event type icon">
-    </div>
-    <h3 class="event__title">Taxi to airport</h3>
+    ${getRandomWaypoint(waypoint)}
 
     <div class="event__schedule">
       <p class="event__time">
@@ -24,11 +50,7 @@ export const createTripDay = (cardData) => {
 
     <h4 class="visually-hidden">Offers:</h4>
     <ul class="event__selected-offers">
-      <li class="event__offer">
-        <span class="event__offer-title">Order Uber</span>
-        &plus;
-        &euro;&nbsp;<span class="event__offer-price">20</span>
-      </li>
+      ${createExtraServicesMarkup(extraServices)}
     </ul>
 
     <button class="event__rollup-btn" type="button">

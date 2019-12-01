@@ -1,12 +1,26 @@
-const ICON_PATH = `../../markup/img/icons/`;
+const ICON_PATH = `img/icons/`;
 
-const routeCollection = [`bus`, `check-in`, `drive`, `flight`, `restaurant`, `ship`, `sightseeing`, `taxi`, `train`, `transport`, `trip`];
+const routeCollection = [
+  {routeType: `bus`, description: `Bus to`, iconPath: null},
+  {routeType: `check-in`, description: `Check into hotel`},
+  {routeType: `drive`, description: `Drive to`},
+  {routeType: `flight`, description: `Flight to`},
+  {routeType: `restaurant`, description: `Restaurant`},
+  {routeType: `ship`, description: `Ship`},
+  {routeType: `sightseeing`, description: `Natural History Museum`},
+  {routeType: `taxi`, description: `Taxi to airport`},
+  {routeType: `train`, description: `Train to`},
+  {routeType: `transport`, description: `Transport`},
+];
 
 const citiesToVisit = [`Amsterdam`, `Geneva`, `Chamonix`, `Geneva`, `Amsterdam`];
 
-const additionalOptionsType = [`luggage`, `comfort`, `meal`, `seats`];
-
-const additionalNameAndPrice = [[`Add luggage`, `10 €`], [`Switch to comfort class`, `150 €`], [`Add meal`, `2 €`], [`Choose seats`, `9 €`]];
+const additionalOptionsType = [
+  {additionalName: `luggage`, description: `Add luggage`, price: `30`},
+  {additionalName: `comfort`, description: `Switch to comfort class`, price: `150`},
+  {additionalName: `meal`, description: `Add meal`, price: `2`},
+  {additionalName: `seats`, description: `Choose seats`, price: `9`},
+];
 
 const defaultDescritpionText =
   `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra.
@@ -20,11 +34,12 @@ const defaultDescritpionText =
 const getNumberBetweenMinMax = (min, max) => Math.round(min - 0.5 + Math.random() * (max - min + 1));
 
 const createWaypointType = () => {
-  const waypointsType = new Map();
+  const mapResult = [];
   routeCollection.map((item) => {
-    waypointsType.set(item, `${ICON_PATH}${item}.png`);
+    item.iconPath = `${ICON_PATH}${item.routeType}.png`;
+    mapResult.push(item);
   });
-  return waypointsType;
+  return mapResult;
 };
 
 const getPlacePhoto = () => {
@@ -73,10 +88,10 @@ const createFakeTime = () => {
 
 const getAdditionalServices = () => {
   const quantityOfServices = getNumberBetweenMinMax(0, 2);
-  const additionalServicesCollection = new Map();
+  const additionalServicesCollection = [];
   for (let i = 0; i < quantityOfServices; i++) {
     const randomServicesIndex = Math.floor(Math.random() * additionalOptionsType.length);
-    additionalServicesCollection.set(additionalOptionsType[randomServicesIndex], additionalNameAndPrice[randomServicesIndex]);
+    additionalServicesCollection.push(additionalOptionsType[randomServicesIndex]);
   }
   return additionalServicesCollection;
 };
