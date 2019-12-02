@@ -1,7 +1,7 @@
 import {additionalOptionsType} from '../const.js';
 
 export const createEventAddMenu = (cardData) => {
-  const {description, placePhoto, estimatedTime, tripCost, citiesInTheRoute} = cardData;
+  const {description, placePhoto, estimatedTime, tripCost, citiesInTheRoute, waypoint} = cardData;
   return `<form class="trip-events__item  event  event--edit" action="#" method="post">
   <header class="event__header">
     <div class="event__type-wrapper">
@@ -15,59 +15,27 @@ export const createEventAddMenu = (cardData) => {
         <fieldset class="event__type-group">
           <legend class="visually-hidden">Transfer</legend>
 
-          <div class="event__type-item">
-            <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
-            <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">Taxi</label>
-          </div>
-
-          <div class="event__type-item">
-            <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus">
-            <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">Bus</label>
-          </div>
-
-          <div class="event__type-item">
-            <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train">
-            <label class="event__type-label  event__type-label--train" for="event-type-train-1">Train</label>
-          </div>
-
-          <div class="event__type-item">
-            <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship">
-            <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">Ship</label>
-          </div>
-
-          <div class="event__type-item">
-            <input id="event-type-transport-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="transport">
-            <label class="event__type-label  event__type-label--transport" for="event-type-transport-1">Transport</label>
-          </div>
-
-          <div class="event__type-item">
-            <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive">
-            <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">Drive</label>
-          </div>
-
-          <div class="event__type-item">
-            <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked>
-            <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
-          </div>
+          ${waypoint[`transportType`].map((item) => {
+    return `
+    <div class="event__type-item">
+    <input id="event-type-${item.routeType}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${item.routeType}">
+    <label class="event__type-label  event__type-label--${item.routeType}" for="event-type-${item.routeType}-1">${item.routeType.charAt(0).toUpperCase() + item.routeType.substr(1)}</label>
+  </div>
+            `;
+  })}
         </fieldset>
 
         <fieldset class="event__type-group">
           <legend class="visually-hidden">Activity</legend>
 
-          <div class="event__type-item">
-            <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in">
-            <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-1">Check-in</label>
+          ${waypoint[`servicesType`].map((item) => {
+    return `
+            <div class="event__type-item">
+            <input id="event-type-${item.routeType}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${item.routeType}">
+            <label class="event__type-label  event__type-label--${item.routeType}" for="event-type-${item.routeType}-1">${item.routeType.charAt(0).toUpperCase() + item.routeType.substr(1)}</label>
           </div>
-
-          <div class="event__type-item">
-            <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing">
-            <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
-          </div>
-
-          <div class="event__type-item">
-            <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant">
-            <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1">Restaurant</label>
-          </div>
+            `;
+  })}
         </fieldset>
       </div>
     </div>

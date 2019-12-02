@@ -16,12 +16,14 @@ const createExtraServicesMarkup = (servicesData) => {
 };
 
 const getRandomWaypoint = (waypointCollection) => {
-  const randomRouteType = waypointCollection[Math.floor(Math.random() * waypointCollection.length)];
+  const randomIndex = Math.floor(Math.random() * Object.keys(waypointCollection).length);
+  let randomRouteType = Object.keys(waypointCollection)[randomIndex];
+  const randomServiceIndex = Math.floor(Math.random() * waypointCollection[randomRouteType].length);
   return (
     `<div class="event__type">
-    <img class="event__type-icon" width="42" height="42" src="${randomRouteType.iconPath}" alt="Event type icon">
+    <img class="event__type-icon" width="42" height="42" src="${waypointCollection[randomRouteType][randomServiceIndex].iconPath}" alt="Event type icon">
   </div>
-  <h3 class="event__title">${randomRouteType.description}</h3>
+  <h3 class="event__title">${waypointCollection[randomRouteType][randomServiceIndex].description}</h3>
     `
   );
 };

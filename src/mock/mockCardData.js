@@ -2,18 +2,22 @@ import {additionalOptionsType} from '../const.js';
 
 const ICON_PATH = `img/icons/`;
 
-const routeCollection = [
-  {routeType: `bus`, description: `Bus to`},
-  {routeType: `check-in`, description: `Check into hotel`},
-  {routeType: `drive`, description: `Drive to`},
-  {routeType: `flight`, description: `Flight to`},
-  {routeType: `restaurant`, description: `Restaurant`},
-  {routeType: `ship`, description: `Ship`},
-  {routeType: `sightseeing`, description: `Natural History Museum`},
-  {routeType: `taxi`, description: `Taxi to airport`},
-  {routeType: `train`, description: `Train to`},
-  {routeType: `transport`, description: `Transport`},
-];
+const routeCollection = {
+  transportType: [
+    {routeType: `bus`, description: `Bus to`},
+    {routeType: `drive`, description: `Drive to`},
+    {routeType: `flight`, description: `Flight to`},
+    {routeType: `ship`, description: `Ship`},
+    {routeType: `taxi`, description: `Taxi to airport`},
+    {routeType: `train`, description: `Train to`},
+    {routeType: `transport`, description: `Transport`},
+  ],
+  servicesType: [
+    {routeType: `check-in`, description: `Check into hotel`},
+    {routeType: `sightseeing`, description: `Natural History Museum`},
+    {routeType: `restaurant`, description: `Restaurant`},
+  ],
+};
 
 const citiesToVisit = [`Amsterdam`, `Geneva`, `Chamonix`, `Geneva`, `Amsterdam`];
 
@@ -28,13 +32,18 @@ const defaultDescritpionText =
 
 const getNumberBetweenMinMax = (min, max) => Math.round(min - 0.5 + Math.random() * (max - min + 1));
 
-const createWaypointType = () => {
-  const mapResult = [];
-  routeCollection.map((item) => {
-    item.iconPath = `${ICON_PATH}${item.routeType}.png`;
-    mapResult.push(item);
-  });
-  return mapResult;
+const createWaypointType = (routeCol) => {
+  for (let type in routeCol) {
+    if (routeCol.hasOwnProperty(type)) {
+      const mapResult = [];
+      routeCol[type].map((item) => {
+        item.iconPath = `${ICON_PATH}${item.routeType}.png`;
+        mapResult.push(item);
+      });
+      routeCol[type] = mapResult;
+    }
+  }
+  return routeCol;
 };
 
 const getPlacePhoto = () => {
@@ -92,7 +101,7 @@ const getAdditionalServices = () => {
 
 const createRouteData = () => {
   return {
-    waypoint: createWaypointType(),
+    waypoint: createWaypointType(routeCollection),
     citiesInTheRoute: citiesToVisit,
     placePhoto: getPlacePhoto(),
     description: getPlaceDescription(),
