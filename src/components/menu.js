@@ -1,7 +1,14 @@
-export const createMenu = () => (
+const createMenuMarkup = (menuData) => {
+  const menuMarkupCollection = [];
+  for (let itemMenu of menuData) {
+    menuMarkupCollection.push(`<a class="trip-tabs__btn ${itemMenu.menuChecked === true ? `trip-tabs__btn--active` : ``}" href="#">${itemMenu.menuName}</a>`);
+  }
+  return menuMarkupCollection.join(` `);
+};
+
+export const createMenu = (menuData) => (
   `<nav class="trip-controls__trip-tabs  trip-tabs">
-  <a class="trip-tabs__btn" href="#">Table</a>
-  <a class="trip-tabs__btn  trip-tabs__btn--active" href="#">Stats</a>
+  ${createMenuMarkup(menuData)}
 </nav>
   `
 );

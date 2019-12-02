@@ -1,7 +1,9 @@
+import {additionalOptionsType} from '../const.js';
+
 const ICON_PATH = `img/icons/`;
 
 const routeCollection = [
-  {routeType: `bus`, description: `Bus to`, iconPath: null},
+  {routeType: `bus`, description: `Bus to`},
   {routeType: `check-in`, description: `Check into hotel`},
   {routeType: `drive`, description: `Drive to`},
   {routeType: `flight`, description: `Flight to`},
@@ -14,13 +16,6 @@ const routeCollection = [
 ];
 
 const citiesToVisit = [`Amsterdam`, `Geneva`, `Chamonix`, `Geneva`, `Amsterdam`];
-
-const additionalOptionsType = [
-  {additionalName: `luggage`, description: `Add luggage`, price: `30`},
-  {additionalName: `comfort`, description: `Switch to comfort class`, price: `150`},
-  {additionalName: `meal`, description: `Add meal`, price: `2`},
-  {additionalName: `seats`, description: `Choose seats`, price: `9`},
-];
 
 const defaultDescritpionText =
   `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra.
@@ -62,8 +57,7 @@ const createTime = (time, timeType) => {
   switch (timeType) {
     case `hours`:
       const MAX_HOURS = 24;
-      const TIME_DIFF = 1;
-      checkedTime = time > MAX_HOURS ? (time + TIME_DIFF) - MAX_HOURS : time;
+      checkedTime = time >= MAX_HOURS ? time - MAX_HOURS : time;
       if (checkedTime < 10) {
         checkedTime = `0${checkedTime}`;
       }
@@ -79,7 +73,7 @@ const createFakeTime = () => {
   // diff between startTime and endTime. Example
   const TIME_DIFF = 1;
   const data = new Date();
-  const dayData = data.toDateString();
+  const dayData = `${data.getDate()}/${data.getMonth() + 1 > 12 ? (data.getMonth() + 1) - data.getMonth() : data.getMonth() + 1}/${data.getDate()}`;
   const startTime = `${createTime(data.getHours(), `hours`)}:${createTime(data.getMinutes(), `minutes`)}`;
   const endTime = `${createTime(data.getHours() + TIME_DIFF, `hours`)}:${createTime(data.getMinutes(), `minutes`)}`;
   const diffTime = `${TIME_DIFF}H`;
