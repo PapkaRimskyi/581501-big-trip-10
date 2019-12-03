@@ -1,6 +1,9 @@
 import {additionalOptionsType} from '../const.js';
 
 const ICON_PATH = `img/icons/`;
+const MIN_QUANTITY_DESCRIPTION = 1;
+const MAX_QUANTITY_DESCRIPTION = 1;
+const MAX_HOURS = 24;
 
 const routeCollection = {
   transportType: [
@@ -53,7 +56,7 @@ const getPlacePhoto = () => {
 const getPlaceDescription = () => {
   const description = [];
   const sentencesCollection = defaultDescritpionText.split(`.`);
-  const quantityOfSentences = getNumberBetweenMinMax(1, 3);
+  const quantityOfSentences = getNumberBetweenMinMax(MIN_QUANTITY_DESCRIPTION, MAX_QUANTITY_DESCRIPTION);
   for (let i = 0; i < quantityOfSentences; i++) {
     const randomSentenceIndex = Math.floor(Math.random() * sentencesCollection.length);
     description.push(sentencesCollection[randomSentenceIndex]);
@@ -65,7 +68,6 @@ const createTime = (time, timeType) => {
   let checkedTime = time;
   switch (timeType) {
     case `hours`:
-      const MAX_HOURS = 24;
       checkedTime = time >= MAX_HOURS ? time - MAX_HOURS : time;
       if (checkedTime < 10) {
         checkedTime = `0${checkedTime}`;
@@ -108,6 +110,7 @@ const createRouteData = () => {
     estimatedTime: createFakeTime(),
     tripCost: `${Math.floor(Math.random() * 200)}`,
     extraServices: getAdditionalServices(),
+    favorite: Math.random() > 0.5 ? true : false,
   };
 };
 
