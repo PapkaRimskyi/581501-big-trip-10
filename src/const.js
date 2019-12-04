@@ -1,3 +1,5 @@
+export const QUANTITY_OF_RENDER = 3;
+
 export const additionalOptionsType = [
   {additionalName: `luggage`, description: `Add luggage`, price: `30`, checked: true},
   {additionalName: `comfort`, description: `Switch to comfort class`, price: `100`, checked: true},

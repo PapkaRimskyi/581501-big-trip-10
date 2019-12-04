@@ -1,8 +1,10 @@
 import {additionalOptionsType} from '../const.js';
+import {createElement} from '../utils.js';
 
-export const createEventAddMenu = (cardData) => {
+const createEventAddMenu = (cardData) => {
   const {description, placePhoto, estimatedTime, tripCost, citiesInTheRoute, waypoint} = cardData;
-  return `<form class="trip-events__item  event  event--edit" action="#" method="post">
+  return `<li class="trip-events__item">
+  <form class="trip-events__item  event  event--edit" action="#" method="post">
   <header class="event__header">
     <div class="event__type-wrapper">
       <label class="event__type  event__type-btn" for="event-type-toggle-1">
@@ -108,5 +110,28 @@ export const createEventAddMenu = (cardData) => {
     </section>
   </section>
 </form>
+</li>
   `;
 };
+
+export default class EventAddMenu {
+  constructor(cardData) {
+    this._element = null;
+    this._cardData = cardData;
+  }
+
+  getTemplate() {
+    return createEventAddMenu(this._cardData);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

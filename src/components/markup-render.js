@@ -1,3 +1,12 @@
+import {positionForRender} from '../utils.js';
+
 export const renderMarkup = (container, markup, where) => {
-  container.insertAdjacentHTML(where, markup);
+  switch (where) {
+    case positionForRender.afterbegin:
+      container.prepend(markup);
+      break;
+    case positionForRender.beforeend:
+      container.append(markup);
+      break;
+  }
 };

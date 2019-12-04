@@ -1,3 +1,5 @@
+import {createElement} from '../utils.js';
+
 const createExtraServicesMarkup = (servicesData) => {
   if (servicesData.length !== 0) {
     const servicesMarkupArray = [];
@@ -28,12 +30,11 @@ const getRandomWaypoint = (waypointCollection) => {
   );
 };
 
-export const createTripDay = (cardData) => {
+const createTripDay = (cardData) => {
   const {estimatedTime, tripCost, extraServices, waypoint} = cardData;
 
   return (
-    `
-  <li class="trip-events__item">
+    `<li class="trip-events__item">
   <div class="event">
     ${getRandomWaypoint(waypoint)}
 
@@ -63,3 +64,25 @@ export const createTripDay = (cardData) => {
   `
   );
 };
+
+export default class TripDay {
+  constructor(routeData) {
+    this._element = null;
+    this._routeData = routeData;
+  }
+
+  getTemplate() {
+    return createTripDay(this._routeData);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

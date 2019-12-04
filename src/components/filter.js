@@ -1,4 +1,7 @@
-export const createFilter = (filterData) => (
+import {mockFilterData} from '../mock/mockFilterData.js';
+import {createElement} from '../utils.js';
+
+const createFilter = (filterData) => (
   `<form class="trip-filters" action="#" method="get">
   ${filterData.map((item) => {
     return `
@@ -12,3 +15,24 @@ export const createFilter = (filterData) => (
 </form>
   `
 );
+
+export default class Filter {
+  constructor() {
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilter(mockFilterData);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
