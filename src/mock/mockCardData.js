@@ -110,7 +110,7 @@ const createRouteData = () => {
     estimatedTime: createFakeTime(),
     tripCost: `${Math.floor(Math.random() * 200)}`,
     extraServices: getAdditionalServices(),
-    favorite: Math.random() > 0.5 ? true : false,
+    favorite: Math.random() > 0.5,
   };
 };
 
