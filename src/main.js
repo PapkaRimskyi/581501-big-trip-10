@@ -1,4 +1,5 @@
-import {renderMarkup, renderPosition} from './components/markup-render.js';
+import {renderMarkup} from './components/markup-render.js';
+import {positionForRender} from './utils.js';
 
 import TripInfo from './components/route.js';
 import Menu from './components/menu.js';
@@ -16,10 +17,10 @@ const tripMenu = document.querySelector(`.trip-main__trip-controls`);
 const tripRouteInfo = document.querySelector(`.trip-main__trip-info`);
 const tripEvents = document.querySelector(`.trip-events`);
 
-renderMarkup(tripRouteInfo, new TripInfo().getElement(), renderPosition.afterbegin);
-renderMarkup(tripMenu, new Menu().getElement(), renderPosition.beforeend);
-renderMarkup(tripMenu, new Filter().getElement(), renderPosition.beforeend);
-renderMarkup(tripEvents, new TripContainer().getElement(), renderPosition.beforeend);
+renderMarkup(tripRouteInfo, new TripInfo().getElement(), positionForRender.afterbegin);
+renderMarkup(tripMenu, new Menu().getElement(), positionForRender.beforeend);
+renderMarkup(tripMenu, new Filter().getElement(), positionForRender.beforeend);
+renderMarkup(tripEvents, new TripContainer().getElement(), positionForRender.beforeend);
 
 const tripEventsList = tripEvents.querySelector(`.trip-events__list`);
 
@@ -37,7 +38,7 @@ const renderRouteList = (routeData) => {
     tripEventsList.replaceChild(tripDayInstance.getElement(), tripDayEditForm.getElement());
   });
 
-  renderMarkup(tripEventsList, tripDayInstance.getElement(), renderPosition.beforeend);
+  renderMarkup(tripEventsList, tripDayInstance.getElement(), positionForRender.beforeend);
 };
 
 const routeDataCollection = createRouteDataCollection();
@@ -46,5 +47,5 @@ routeDataCollection.map((card) => {
   renderRouteList(card);
 });
 
-renderMarkup(tripEvents, new Sort().getElement(), renderPosition.afterbegin);
+renderMarkup(tripEvents, new Sort().getElement(), positionForRender.afterbegin);
 calculateRouteCost(routeDataCollection);

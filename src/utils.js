@@ -3,3 +3,8 @@ export const createElement = (template) => {
   domElement.innerHTML = template;
   return domElement.firstChild;
 };
+
+export const positionForRender = {
+  afterbegin: `afterbegin`,
+  beforeend: `beforeend`,
+};

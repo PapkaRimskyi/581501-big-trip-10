@@ -1,14 +1,11 @@
-export const renderPosition = {
-  afterbegin: `afterbegin`,
-  beforeend: `beforeend`,
-};
+import {positionForRender} from '../utils.js';
 
 export const renderMarkup = (container, markup, where) => {
   switch (where) {
-    case renderPosition.afterbegin:
+    case positionForRender.afterbegin:
       container.prepend(markup);
       break;
-    case renderPosition.beforeend:
+    case positionForRender.beforeend:
       container.append(markup);
       break;
   }
