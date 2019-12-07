@@ -1,4 +1,4 @@
-import {createElement} from '../utils.js';
+import AbstractComponent from './abstract-class.js';
 
 const createExtraServicesMarkup = (servicesData) => {
   if (servicesData.length !== 0) {
@@ -65,9 +65,9 @@ const createTripDay = (cardData) => {
   );
 };
 
-export default class TripDay {
+export default class TripDay extends AbstractComponent {
   constructor(routeData) {
-    this._element = null;
+    super();
     this._routeData = routeData;
   }
 
@@ -75,14 +75,7 @@ export default class TripDay {
     return createTripDay(this._routeData);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+  setButtonClickHandler(handler) {
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, handler);
   }
 }

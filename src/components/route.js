@@ -1,4 +1,4 @@
-import {createElement} from '../utils.js';
+import AbstractComponent from './abstract-class.js';
 
 const createRoute = () => (
   `<div class="trip-info__main">
@@ -9,23 +9,8 @@ const createRoute = () => (
   `
 );
 
-export default class TripInfo {
-  constructor() {
-    this._element = null;
-  }
-
+export default class TripInfo extends AbstractComponent {
   getTemplate() {
     return createRoute();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

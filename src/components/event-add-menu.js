@@ -1,5 +1,5 @@
 import {additionalOptionsType} from '../const.js';
-import {createElement} from '../utils.js';
+import AbstractComponent from './abstract-class.js';
 
 const createEventAddMenu = (cardData) => {
   const {description, placePhoto, estimatedTime, tripCost, citiesInTheRoute, waypoint} = cardData;
@@ -114,9 +114,9 @@ const createEventAddMenu = (cardData) => {
   `;
 };
 
-export default class EventAddMenu {
+export default class EventAddMenu extends AbstractComponent {
   constructor(cardData) {
-    this._element = null;
+    super();
     this._cardData = cardData;
   }
 
@@ -124,14 +124,7 @@ export default class EventAddMenu {
     return createEventAddMenu(this._cardData);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+  setFormClickHandler(handler) {
+    this.getElement().querySelector(`form`).addEventListener(`submit`, handler);
   }
 }

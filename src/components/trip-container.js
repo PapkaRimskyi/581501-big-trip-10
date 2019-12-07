@@ -1,4 +1,4 @@
-import {createElement} from '../utils.js';
+import AbstractComponent from './abstract-class.js';
 
 const createTripContainer = () => {
   return (
@@ -15,23 +15,8 @@ const createTripContainer = () => {
   );
 };
 
-export default class TripContainer {
-  constructor() {
-    this._element = null;
-  }
-
+export default class TripContainer extends AbstractComponent {
   getTemplate() {
     return createTripContainer();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
