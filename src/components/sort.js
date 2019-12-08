@@ -1,4 +1,4 @@
-import {createElement} from '../utils.js';
+import AbstractComponent from './abstract-class.js';
 
 const createSort = () => (
   `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
@@ -28,23 +28,8 @@ const createSort = () => (
   `
 );
 
-export default class Sort {
-  constructor() {
-    this._element = null;
-  }
-
+export default class Sort extends AbstractComponent {
   getTemplate() {
     return createSort();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
