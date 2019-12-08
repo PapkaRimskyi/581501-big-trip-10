@@ -20,17 +20,6 @@ const createSort = (sortData) => (
   `
 );
 
-export const getRouteStartTime = (value) => {
-  const timeValue = value.split(`:`);
-  if (timeValue[0] > 10) {
-    return timeValue[0];
-  } else if (timeValue[0] < 10 && timeValue[0] !== 0) {
-    return timeValue[0].slice(1, 2);
-  } else {
-    return timeValue[0].slice(0, 1);
-  }
-};
-
 export default class Sort extends AbstractComponent {
   constructor() {
     super();

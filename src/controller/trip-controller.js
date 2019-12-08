@@ -3,7 +3,7 @@ import {renderMarkup, positionForRender, replaceElement} from '../utils/render-m
 import {sortType} from '../mock/mockSortData.js';
 
 import TripInfo from '../components/route.js';
-import Sort, {getRouteStartTime} from '../components/sort.js';
+import Sort from '../components/sort.js';
 
 import TripContainer from '../components/trip-container.js';
 import TripDay from '../components/trip-days.js';
@@ -73,13 +73,13 @@ export default class TripController {
         inputSortType.checked = true;
         switch (currentSort) {
           case sortTypeNameCollection[0]:
-            // sortedRouteDataCollection = routeDataCollection.slice().sort((a, b) => a.estimatedTime.startTime - b.estimatedTime.startTime);
+            sortedRouteDataCollection = routeDataCollection.slice();
             break;
           case sortTypeNameCollection[1]:
-            sortedRouteDataCollection = routeDataCollection.slice().sort((a, b) => getRouteStartTime(a.estimatedTime.startTime) - getRouteStartTime(b.estimatedTime.startTime));
+            sortedRouteDataCollection = routeDataCollection.slice().sort((a, b) => parseInt(b.estimatedTime.diffTime, 10) - parseInt(a.estimatedTime.diffTime, 10));
             break;
           case sortTypeNameCollection[2]:
-            sortedRouteDataCollection = routeDataCollection.slice().sort((a, b) => a.tripCost - b.tripCost);
+            sortedRouteDataCollection = routeDataCollection.slice().sort((a, b) => b.tripCost - a.tripCost);
             break;
         }
         tripEventsList.innerHTML = ``;
