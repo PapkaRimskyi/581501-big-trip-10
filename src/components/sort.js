@@ -1,35 +1,59 @@
 import AbstractComponent from './abstract-class.js';
+import {sortType} from '../mock/mockSortData.js';
 
-const createSort = () => (
+const createSort = (sortData) => (
   `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
   <span class="trip-sort__item  trip-sort__item--day"></span>
 
-  <div class="trip-sort__item  trip-sort__item--event">
-    <input id="sort-event" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-event">
-    <label class="trip-sort__btn" for="sort-event">Event</label>
-  </div>
-
-  <div class="trip-sort__item  trip-sort__item--time">
-    <input id="sort-time" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-time" checked>
-    <label class="trip-sort__btn  trip-sort__btn--active  trip-sort__btn--by-increase" for="sort-time">
-      Time
+  ${sortData.map((sort) => {
+    return `<div class="trip-sort__item  trip-sort__item--${sort.sortName}">
+    <input id="sort-${sort.sortName}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-${sort.sortName}" ${sort.checked === true ? `checked` : ``}>
+    <label class="trip-sort__btn" for="sort-${sort.sortName}" data-sort="${sort.sortName}">
+      ${sort.sortName.charAt(0).toUpperCase() + sort.sortName.substr(1)}
     </label>
   </div>
-
-  <div class="trip-sort__item  trip-sort__item--price">
-    <input id="sort-price" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-price">
-    <label class="trip-sort__btn" for="sort-price">
-      Price
-    </label>
-  </div>
+    `;
+  }).join(` `)}
 
   <span class="trip-sort__item  trip-sort__item--offers">Offers</span>
 </form>
   `
 );
 
+export const getRouteStartTime = (value) => {
+  const timeValue = value.split(`:`);
+  if (timeValue[0] > 10) {
+    return timeValue[0];
+  } else if (timeValue[0] < 10 && timeValue[0] !== 0) {
+    return timeValue[0].slice(1, 2);
+  } else {
+    return timeValue[0].slice(0, 1);
+  }
+};
+
 export default class Sort extends AbstractComponent {
+  constructor() {
+    super();
+    this._currentSortType = sortType.find((item) => item.checked === true ? item : false).sortName;
+  }
+
   getTemplate() {
-    return createSort();
+    return createSort(sortType);
+  }
+
+  setSortClickHandler(handler) {
+    this.getElement().addEventListener(`click`, (evt) => {
+      evt.preventDefault();
+
+      if (evt.target.tagName === `LABEL`) {
+        if (evt.target.dataset.sort === this._currentSortType) {
+          return;
+        }
+        this._currentSortType = evt.target.dataset.sort;
+        handler(this._currentSortType);
+      } else {
+        return;
+      }
+    });
   }
 }
