@@ -69,7 +69,6 @@ export default class TripController {
       this._sort.setSortClickHandler((currentSort) => {
         let sortedRouteDataCollection = [];
         const sortTypeNameCollection = sortType.map((type) => type.sortName);
-        console.log(routeDataCollection);
         const inputSortType = this._sort.getElement().querySelector(`.trip-sort__item--${currentSort}`).querySelector(`input`);
         inputSortType.checked = true;
         switch (currentSort) {
