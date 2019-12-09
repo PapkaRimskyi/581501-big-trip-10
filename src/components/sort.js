@@ -23,7 +23,7 @@ const createSort = (sortData) => (
 export default class Sort extends AbstractComponent {
   constructor() {
     super();
-    this._currentSortType = sortType.find((item) => item.checked === true ? item : false).sortName;
+    this._currentSortType = sortType.find((item) => item.checked ? item : false).sortName;
   }
 
   getTemplate() {
@@ -40,9 +40,9 @@ export default class Sort extends AbstractComponent {
         }
         this._currentSortType = evt.target.dataset.sort;
         handler(this._currentSortType);
-      } else {
         return;
       }
+      return;
     });
   }
 }
