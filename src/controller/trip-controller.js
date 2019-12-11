@@ -1,4 +1,4 @@
-import {renderMarkup, positionForRender, replaceElement} from '../utils/render-markup.js';
+import {renderMarkup, positionForRender} from '../utils/render-markup.js';
 
 import {sortType} from '../mock/mockSortData.js';
 
@@ -6,47 +6,12 @@ import TripInfo from '../components/route.js';
 import Sort from '../components/sort.js';
 
 import TripContainer from '../components/trip-container.js';
-import TripDay from '../components/trip-days.js';
+import PointController from './point-controller.js';
 import {calculateRouteCost} from '../components/calculateCost.js';
-import EventAddMenu from '../components/event-add-menu.js';
 
 import NoRouteWarning from '../components/no-route.js';
 
-import {keyCodeName} from '../const.js';
-
 const tripEvents = document.querySelector(`.trip-events`);
-
-const renderRouteList = (eventsList, routeData) => {
-  const tripDayInstance = new TripDay(routeData);
-  const tripDayEditFormInstance = new EventAddMenu(routeData);
-
-  const replaceCardToForm = () => {
-    replaceElement(tripDayEditFormInstance, tripDayInstance);
-  };
-
-  const replaceFormToCard = () => {
-    replaceElement(tripDayInstance, tripDayEditFormInstance);
-  };
-
-  const editFormEscHandler = (evt) => {
-    if (keyCodeName.escape === evt.key && eventsList.querySelector(`.event--edit`)) {
-      replaceFormToCard();
-      document.removeEventListener(`keydown`, editFormEscHandler);
-    }
-  };
-
-  tripDayInstance.setButtonClickHandler(() => {
-    replaceCardToForm();
-    document.addEventListener(`keydown`, editFormEscHandler);
-  });
-
-  tripDayEditFormInstance.setFormClickHandler(() => {
-    replaceFormToCard();
-    document.removeEventListener(`keydown`, editFormEscHandler);
-  });
-
-  renderMarkup(eventsList, tripDayInstance, positionForRender.beforeend);
-};
 
 export default class TripController {
   constructor(container) {
@@ -84,12 +49,12 @@ export default class TripController {
         }
         tripEventsList.innerHTML = ``;
         sortedRouteDataCollection.map((card) => {
-          renderRouteList(tripEventsList, card);
+          new PointController(tripEventsList, this._onDataChange).render(card);
         });
       });
 
       routeDataCollection.map((card) => {
-        renderRouteList(tripEventsList, card);
+        new PointController(tripEventsList, this._onDataChange).render(card);
       });
 
       calculateRouteCost(routeDataCollection);
@@ -97,4 +62,8 @@ export default class TripController {
       renderMarkup(tripEvents, new NoRouteWarning(), positionForRender.beforeend);
     }
   }
+
+  // _onDataChange(oldRoute, newRouteData) {
+  //   console.log(oldRoute, newRouteData);
+  // }
 }
