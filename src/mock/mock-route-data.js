@@ -5,20 +5,20 @@ const MIN_QUANTITY_DESCRIPTION = 1;
 const MAX_QUANTITY_DESCRIPTION = 1;
 const MAX_HOURS = 24;
 
-const routeCollection = {
+const eventTypeCollection = {
   transportType: [
-    {routeType: `bus`, description: `Bus to`},
-    {routeType: `drive`, description: `Drive to`},
-    {routeType: `flight`, description: `Flight to`},
-    {routeType: `ship`, description: `Ship`},
-    {routeType: `taxi`, description: `Taxi to airport`},
-    {routeType: `train`, description: `Train to`},
-    {routeType: `transport`, description: `Transport`},
+    {routeType: `bus`, description: `Bus to`, iconPath: `${ICON_PATH}bus.png`},
+    {routeType: `drive`, description: `Drive to`, iconPath: `${ICON_PATH}drive.png`},
+    {routeType: `flight`, description: `Flight to`, iconPath: `${ICON_PATH}flight.png`},
+    {routeType: `ship`, description: `Ship to`, iconPath: `${ICON_PATH}ship.png`},
+    {routeType: `taxi`, description: `Taxi to airport`, iconPath: `${ICON_PATH}taxi.png`},
+    {routeType: `train`, description: `Train to`, iconPath: `${ICON_PATH}train.png`},
+    {routeType: `transport`, description: `Transport to`, iconPath: `${ICON_PATH}transport.png`},
   ],
   servicesType: [
-    {routeType: `check-in`, description: `Check into hotel`},
-    {routeType: `sightseeing`, description: `Natural History Museum`},
-    {routeType: `restaurant`, description: `Restaurant`},
+    {routeType: `check-in`, description: `Check into hotel`, iconPath: `${ICON_PATH}check-in.png`},
+    {routeType: `sightseeing`, description: `Natural History Museum`, iconPath: `${ICON_PATH}sightseeing.png`},
+    {routeType: `restaurant`, description: `Restaurant`, iconPath: `${ICON_PATH}restaurant.png`},
   ],
 };
 
@@ -35,25 +35,31 @@ const defaultDescritpionText =
 
 const getNumberBetweenMinMax = (min, max) => Math.round(min - 0.5 + Math.random() * (max - min + 1));
 
-const createWaypointType = (routeCol) => {
-  for (let type in routeCol) {
-    if (routeCol.hasOwnProperty(type)) {
-      const mapResult = [];
-      routeCol[type].map((item) => {
-        item.iconPath = `${ICON_PATH}${item.routeType}.png`;
-        mapResult.push(item);
+export const findEventType = (searchName) => {
+  let result = null;
+  for (let type in eventTypeCollection) {
+    if (eventTypeCollection.hasOwnProperty(type)) {
+      eventTypeCollection[type].filter((item) => {
+        if (item.routeType === searchName) {
+          result = item;
+        }
       });
-      routeCol[type] = mapResult;
     }
   }
-  return routeCol;
+  return result;
+};
+
+const getRandomWaypointType = (eventTypeCol) => {
+  const randomItem = Object.keys(eventTypeCol)[getNumberBetweenMinMax(0, Object.keys(eventTypeCol).length - 1)];
+  const chosenType = eventTypeCol[randomItem];
+  return chosenType[getNumberBetweenMinMax(0, chosenType.length - 1)];
 };
 
 const getPlacePhoto = () => {
   return `http://picsum.photos/300/150?r=${Math.random()}`;
 };
 
-const getPlaceDescription = () => {
+export const getPlaceDescription = () => {
   const description = [];
   const sentencesCollection = defaultDescritpionText.split(`.`);
   const quantityOfSentences = getNumberBetweenMinMax(MIN_QUANTITY_DESCRIPTION, MAX_QUANTITY_DESCRIPTION);
@@ -84,18 +90,21 @@ const createFakeTime = () => {
   // diff between startTime and endTime. Example
   const TIME_DIFF = 1;
   const data = new Date();
-  const dayData = `${data.getDate()}/${data.getMonth() + 1 > 12 ? (data.getMonth() + 1) - data.getMonth() : data.getMonth() + 1}/${data.getDate()}`;
+  const dayData = `${data.getDate()}/${data.getMonth() + 1 > 12 ? (data.getMonth() + 1) - data.getMonth() : data.getMonth() + 1}/${String(data.getFullYear()).substr(2)}`;
   const startTime = `${createTime(data.getHours(), `hours`)}:${createTime(data.getMinutes(), `minutes`)}`;
   const endTime = `${createTime(data.getHours() + TIME_DIFF, `hours`)}:${createTime(data.getMinutes(), `minutes`)}`;
   const diffTime = `${TIME_DIFF}H`;
   return {dayData, startTime, endTime, diffTime};
 };
 
-const getAdditionalServices = () => {
+export const getAdditionalServices = (withChecks) => {
   const quantityOfServices = getNumberBetweenMinMax(0, 2);
   const additionalServicesCollection = [];
   for (let i = 0; i < quantityOfServices; i++) {
     const randomServicesIndex = Math.floor(Math.random() * additionalOptionsType.length);
+    if (withChecks) {
+      additionalOptionsType[randomServicesIndex].checked = true;
+    }
     additionalServicesCollection.push(additionalOptionsType[randomServicesIndex]);
   }
   return additionalServicesCollection;
@@ -103,13 +112,14 @@ const getAdditionalServices = () => {
 
 const createRouteData = () => {
   return {
-    waypoint: createWaypointType(routeCollection),
+    waypoint: getRandomWaypointType(eventTypeCollection),
     citiesInTheRoute: citiesToVisit,
+    randomCity: citiesToVisit[getNumberBetweenMinMax(0, citiesToVisit.length - 1)],
     placePhoto: getPlacePhoto(),
     description: getPlaceDescription(),
     estimatedTime: createFakeTime(),
     tripCost: `${Math.floor(Math.random() * 200)}`,
-    extraServices: getAdditionalServices(),
+    extraServices: getAdditionalServices(true),
     favorite: Math.random() > 0.5,
   };
 };
