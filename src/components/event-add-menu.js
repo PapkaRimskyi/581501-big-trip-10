@@ -179,7 +179,5 @@ export default class EventAddMenu extends AbstractSmartComponent {
     this.getElement().querySelector(`.event__type-list`).addEventListener(`click`, handler);
   }
 
-  dropping() {
-    this.rerender();
-  }
+  recoveryListeners() {}
 }

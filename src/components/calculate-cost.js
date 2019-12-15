@@ -8,11 +8,11 @@ const countExtraServices = (extraServicesCollection) => {
   return extraServicesSum;
 };
 
-export const calculateRouteCost = (routeData) => {
+export const calculateRouteCost = (routesData) => {
   const costInput = document.querySelector(`.trip-info__cost-value`);
   let sum = 0;
-  for (let i = 0; i < routeData.length; i++) {
-    const {tripCost, extraServices} = routeData[i];
+  for (let i = 0; i < routesData.length; i++) {
+    const {tripCost, extraServices} = routesData[i];
     sum += +tripCost + countExtraServices(extraServices);
   }
   costInput.textContent = sum;
