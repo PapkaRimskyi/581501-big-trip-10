@@ -5,7 +5,7 @@ import Menu from './components/menu.js';
 import Filter from './components/filter.js';
 
 // Import roadMap collection
-import {createRouteDataCollection} from './components/createRoadmap.js';
+import {createRouteDataCollection} from './components/create-roadmap.js';
 
 const tripMenu = document.querySelector(`.trip-main__trip-controls`);
 

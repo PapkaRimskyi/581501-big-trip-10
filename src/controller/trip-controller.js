@@ -1,51 +1,24 @@
-import {renderMarkup, positionForRender, replaceElement} from '../utils/render-markup.js';
+import {renderMarkup, positionForRender} from '../utils/render-markup.js';
 
-import {sortType} from '../mock/mockSortData.js';
+import {mockSortData} from '../mock/mock-sort-data.js';
 
 import TripInfo from '../components/route.js';
 import Sort from '../components/sort.js';
 
 import TripContainer from '../components/trip-container.js';
-import TripDay from '../components/trip-days.js';
-import {calculateRouteCost} from '../components/calculateCost.js';
-import EventAddMenu from '../components/event-add-menu.js';
+import PointController from './point-controller.js';
+import {calculateRouteCost} from '../components/calculate-cost.js';
 
 import NoRouteWarning from '../components/no-route.js';
 
-import {keyCodeName} from '../const.js';
-
 const tripEvents = document.querySelector(`.trip-events`);
 
-const renderRouteList = (eventsList, routeData) => {
-  const tripDayInstance = new TripDay(routeData);
-  const tripDayEditFormInstance = new EventAddMenu(routeData);
-
-  const replaceCardToForm = () => {
-    replaceElement(tripDayEditFormInstance, tripDayInstance);
-  };
-
-  const replaceFormToCard = () => {
-    replaceElement(tripDayInstance, tripDayEditFormInstance);
-  };
-
-  const editFormEscHandler = (evt) => {
-    if (keyCodeName.escape === evt.key && eventsList.querySelector(`.event--edit`)) {
-      replaceFormToCard();
-      document.removeEventListener(`keydown`, editFormEscHandler);
-    }
-  };
-
-  tripDayInstance.setButtonClickHandler(() => {
-    replaceCardToForm();
-    document.addEventListener(`keydown`, editFormEscHandler);
+const renderRoutes = (eventsContainer, routeDataCollection, onDataChange, onViewChange) => {
+  return routeDataCollection.map((route) => {
+    const pointController = new PointController(eventsContainer, onDataChange, onViewChange);
+    pointController.render(route);
+    return pointController;
   });
-
-  tripDayEditFormInstance.setFormClickHandler(() => {
-    replaceFormToCard();
-    document.removeEventListener(`keydown`, editFormEscHandler);
-  });
-
-  renderMarkup(eventsList, tripDayInstance, positionForRender.beforeend);
 };
 
 export default class TripController {
@@ -53,10 +26,16 @@ export default class TripController {
     this._container = container;
     this._sort = new Sort();
     this._tripInfo = new TripInfo();
+    this._routes = null;
+    this._pointCollection = [];
+
+    this._onDataChange = this._onDataChange.bind(this);
+    this._onViewChange = this._onViewChange.bind(this);
   }
 
   render(routeDataCollection) {
     if (routeDataCollection.length !== 0) {
+      this._routes = routeDataCollection;
       const tripRouteInfo = document.querySelector(`.trip-main__trip-info`);
 
       renderMarkup(tripRouteInfo, this._tripInfo, positionForRender.afterbegin);
@@ -68,7 +47,7 @@ export default class TripController {
 
       this._sort.setSortClickHandler((currentSort) => {
         let sortedRouteDataCollection = [];
-        const sortTypeNameCollection = sortType.map((type) => type.sortName);
+        const sortTypeNameCollection = mockSortData.map((type) => type.sortName);
         const inputSortType = this._sort.getElement().querySelector(`.trip-sort__item--${currentSort}`).querySelector(`input`);
         inputSortType.checked = true;
         switch (currentSort) {
@@ -83,18 +62,31 @@ export default class TripController {
             break;
         }
         tripEventsList.innerHTML = ``;
-        sortedRouteDataCollection.map((card) => {
-          renderRouteList(tripEventsList, card);
-        });
+
+        const newRoutes = renderRoutes(tripEventsList, sortedRouteDataCollection, this._onDataChange, this._onViewChange);
+        this._pointCollection = this._pointCollection.concat(newRoutes);
       });
 
-      routeDataCollection.map((card) => {
-        renderRouteList(tripEventsList, card);
-      });
+      const newRoutes = renderRoutes(tripEventsList, routeDataCollection, this._onDataChange, this._onViewChange);
+      this._pointCollection = this._pointCollection.concat(newRoutes);
 
       calculateRouteCost(routeDataCollection);
     } else {
       renderMarkup(tripEvents, new NoRouteWarning(), positionForRender.beforeend);
     }
+  }
+
+  _onDataChange(pointController, oldRoute, newRoute) {
+    const index = this._routes.findIndex((item) => item === oldRoute);
+    if (index === -1) {
+      return;
+    }
+
+    this._routes = [].concat(this._routes.slice(0, index), newRoute, this._routes.slice(index + 1));
+    pointController.render(this._routes[index]);
+  }
+
+  _onViewChange() {
+    this._pointCollection.map((item) => item.setDefaultView());
   }
 }

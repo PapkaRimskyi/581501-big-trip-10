@@ -4,6 +4,9 @@ const createExtraServicesMarkup = (servicesData) => {
   if (servicesData.length !== 0) {
     const servicesMarkupArray = [];
     servicesData.map((item) => {
+      if (!item.checked) {
+        return;
+      }
       servicesMarkupArray.push(`<li class="event__offer">
         <span class="event__offer-title">${item.description}</span>
         &plus;
@@ -17,26 +20,16 @@ const createExtraServicesMarkup = (servicesData) => {
   return ``;
 };
 
-const getRandomWaypoint = (waypointCollection) => {
-  const randomIndex = Math.floor(Math.random() * Object.keys(waypointCollection).length);
-  let randomRouteType = Object.keys(waypointCollection)[randomIndex];
-  const randomServiceIndex = Math.floor(Math.random() * waypointCollection[randomRouteType].length);
-  return (
-    `<div class="event__type">
-    <img class="event__type-icon" width="42" height="42" src="${waypointCollection[randomRouteType][randomServiceIndex].iconPath}" alt="Event type icon">
-  </div>
-  <h3 class="event__title">${waypointCollection[randomRouteType][randomServiceIndex].description}</h3>
-    `
-  );
-};
-
-const createTripDay = (cardData) => {
-  const {estimatedTime, tripCost, extraServices, waypoint} = cardData;
+const createTripDay = (routeData) => {
+  const {estimatedTime, tripCost, extraServices, waypoint, randomCity} = routeData;
 
   return (
     `<li class="trip-events__item">
-  <div class="event">
-    ${getRandomWaypoint(waypoint)}
+    <div class="event">
+      <div class="event__type">
+      <img class="event__type-icon" width="42" height="42" src="${waypoint.iconPath}" alt="Event type icon">
+    </div>
+    <h3 class="event__title">${waypoint.description} ${randomCity}</h3>
 
     <div class="event__schedule">
       <p class="event__time">

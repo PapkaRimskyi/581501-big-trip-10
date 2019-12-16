@@ -1,4 +1,4 @@
-import {mockFilterData} from '../mock/mockFilterData.js';
+import {mockFilterData} from '../mock/mock-filter-data.js';
 import AbstractComponent from './abstract-class.js';
 
 const createFilter = (filterData) => (

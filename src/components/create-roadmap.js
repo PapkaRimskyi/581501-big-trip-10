@@ -1,4 +1,4 @@
-import {createRouteData} from '../mock/mockCardData.js';
+import {createRouteData} from '../mock/mock-route-data.js';
 import {QUANTITY_OF_RENDER} from '../const.js';
 
 export const createRouteDataCollection = () => {
