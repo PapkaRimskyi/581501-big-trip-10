@@ -1,14 +1,9 @@
 import TripDay from '../components/trip-day.js';
 import EventAddMenu from '../components/event-add-menu.js';
-import {renderMarkup, positionForRender, replaceElement} from '../utils/render-markup.js';
+import {renderMarkup, PositionForRender, replaceElement} from '../utils/render-markup.js';
 import {getPlaceDescription, findEventType, getAdditionalServices} from '../mock/mock-route-data.js';
 
-import {keyCodeName} from '../const.js';
-
-const MODE_STATUS = {
-  default: `default`,
-  edit: `edit`,
-};
+import {KeyCodeName, ModeStatus} from '../const.js';
 
 export default class PointController {
   constructor(container, onDataChange, onViewChange) {
@@ -20,7 +15,7 @@ export default class PointController {
     this._routeComponent = null;
     this._routeEventAddMenuComponent = null;
 
-    this._mode = MODE_STATUS.default;
+    this._mode = ModeStatus.DEFAULT;
   }
 
   render(routeData) {
@@ -31,7 +26,7 @@ export default class PointController {
     this._routeEventAddMenuComponent = new EventAddMenu(routeData);
 
     const editFormEscHandler = (evt) => {
-      if (keyCodeName.escape === evt.key && this._container.querySelector(`.event--edit`)) {
+      if (KeyCodeName.ESCAPE === evt.key && this._container.querySelector(`.event--edit`)) {
         this._replaceFormToCard();
         document.removeEventListener(`keydown`, editFormEscHandler);
       }
@@ -45,6 +40,29 @@ export default class PointController {
     this._routeEventAddMenuComponent.setFormClickHandler(() => {
       this._replaceFormToCard();
       document.removeEventListener(`keydown`, editFormEscHandler);
+    });
+
+    this._routeEventAddMenuComponent.setChangeDataHandler(() => {
+      const startTimeInput = document.getElementById(`event-start-time-1`);
+      const endTimeInput = document.getElementById(`event-end-time-1`);
+      const splitStartInputValue = startTimeInput.value.split(` `);
+      const splitEndInputValue = endTimeInput.value.split(` `);
+      let lessThanStartValue = false;
+      for (let i = 0; i < splitEndInputValue.length; i++) {
+        const symbol = i === 0 ? `/` : `:`;
+        for (let j = 0; j < splitEndInputValue[i].split(symbol).length; j++) {
+          if (splitEndInputValue[i].split(symbol)[j] < splitStartInputValue[i].split(symbol)[j]) {
+            startTimeInput.setCustomValidity(`Дата начала поездки не может быть раньше даты окончания поездки`);
+            lessThanStartValue = true;
+            break;
+          } else {
+            startTimeInput.setCustomValidity(``);
+          }
+        }
+        if (lessThanStartValue) {
+          break;
+        }
+      }
     });
 
     this._routeEventAddMenuComponent.setFavotireClickHandler(() => {
@@ -66,23 +84,23 @@ export default class PointController {
       replaceElement(this._routeComponent, oldTaskComponent);
       replaceElement(this._routeEventAddMenuComponent, oldEventAddMenuComponent);
     } else {
-      renderMarkup(this._container, this._routeComponent, positionForRender.beforeend);
+      renderMarkup(this._container, this._routeComponent, PositionForRender.BEFOREEND);
     }
   }
 
   _replaceCardToForm() {
     this._onViewChange();
     replaceElement(this._routeEventAddMenuComponent, this._routeComponent);
-    this._mode = MODE_STATUS.edit;
+    this._mode = ModeStatus.EDIT;
   }
 
   _replaceFormToCard() {
     replaceElement(this._routeComponent, this._routeEventAddMenuComponent);
-    this._mode = MODE_STATUS.default;
+    this._mode = ModeStatus.DEFAULT;
   }
 
   setDefaultView() {
-    if (this._mode !== MODE_STATUS.default) {
+    if (this._mode !== ModeStatus.DEFAULT) {
       this._replaceFormToCard();
     }
   }

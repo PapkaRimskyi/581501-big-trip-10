@@ -1,6 +1,6 @@
-const mockMenuData = [
+const mockMenuTypesData = [
   {menuName: `Table`, menuChecked: false},
   {menuName: `Stats`, menuChecked: true},
 ];
 
-export {mockMenuData};
+export {mockMenuTypesData};

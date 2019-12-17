@@ -1,5 +1,5 @@
 import AbstractComponent from './abstract-class.js';
-import {mockSortData} from '../mock/mock-sort-data.js';
+import {mockSortTypesData} from '../mock/mock-sort-types-data.js';
 
 const createSort = (sortData) => (
   `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
@@ -23,11 +23,11 @@ const createSort = (sortData) => (
 export default class Sort extends AbstractComponent {
   constructor() {
     super();
-    this._currentSortType = mockSortData.find((item) => item.checked ? item : false).sortName;
+    this._currentSortType = mockSortTypesData.find((item) => item.checked ? item : false).sortName;
   }
 
   getTemplate() {
-    return createSort(mockSortData);
+    return createSort(mockSortTypesData);
   }
 
   setSortClickHandler(handler) {

@@ -3,10 +3,9 @@ import {additionalOptionsType} from '../const.js';
 const ICON_PATH = `img/icons/`;
 const MIN_QUANTITY_DESCRIPTION = 1;
 const MAX_QUANTITY_DESCRIPTION = 1;
-const MAX_HOURS = 24;
 
 const eventTypeCollection = {
-  transportType: [
+  transportTypes: [
     {routeType: `bus`, description: `Bus to`, iconPath: `${ICON_PATH}bus.png`},
     {routeType: `drive`, description: `Drive to`, iconPath: `${ICON_PATH}drive.png`},
     {routeType: `flight`, description: `Flight to`, iconPath: `${ICON_PATH}flight.png`},
@@ -15,7 +14,7 @@ const eventTypeCollection = {
     {routeType: `train`, description: `Train to`, iconPath: `${ICON_PATH}train.png`},
     {routeType: `transport`, description: `Transport to`, iconPath: `${ICON_PATH}transport.png`},
   ],
-  servicesType: [
+  servicesTypes: [
     {routeType: `check-in`, description: `Check into hotel`, iconPath: `${ICON_PATH}check-in.png`},
     {routeType: `sightseeing`, description: `Natural History Museum`, iconPath: `${ICON_PATH}sightseeing.png`},
     {routeType: `restaurant`, description: `Restaurant`, iconPath: `${ICON_PATH}restaurant.png`},
@@ -70,31 +69,9 @@ export const getPlaceDescription = () => {
   return description;
 };
 
-const createTime = (time, timeType) => {
-  let checkedTime = time;
-  switch (timeType) {
-    case `hours`:
-      checkedTime = time >= MAX_HOURS ? time - MAX_HOURS : time;
-      if (checkedTime < 10) {
-        checkedTime = `0${checkedTime}`;
-      }
-      break;
-    case `minutes`:
-      checkedTime = time < 10 ? `0${time}` : time;
-      break;
-  }
-  return checkedTime;
-};
-
-const createFakeTime = () => {
-  // diff between startTime and endTime. Example
-  const TIME_DIFF = 1;
-  const data = new Date();
-  const dayData = `${data.getDate()}/${data.getMonth() + 1 > 12 ? (data.getMonth() + 1) - data.getMonth() : data.getMonth() + 1}/${String(data.getFullYear()).substr(2)}`;
-  const startTime = `${createTime(data.getHours(), `hours`)}:${createTime(data.getMinutes(), `minutes`)}`;
-  const endTime = `${createTime(data.getHours() + TIME_DIFF, `hours`)}:${createTime(data.getMinutes(), `minutes`)}`;
-  const diffTime = `${TIME_DIFF}H`;
-  return {dayData, startTime, endTime, diffTime};
+const createFakeTime = (date, difHours = 0) => {
+  date.setHours(date.getHours() + difHours);
+  return new Date(date);
 };
 
 export const getAdditionalServices = (withChecks) => {
@@ -111,13 +88,16 @@ export const getAdditionalServices = (withChecks) => {
 };
 
 const createRouteData = () => {
+  const now = new Date();
+  const TIME_DIFF = 1;
   return {
     waypoint: getRandomWaypointType(eventTypeCollection),
     citiesInTheRoute: citiesToVisit,
     randomCity: citiesToVisit[getNumberBetweenMinMax(0, citiesToVisit.length - 1)],
     placePhoto: getPlacePhoto(),
     description: getPlaceDescription(),
-    estimatedTime: createFakeTime(),
+    startTime: createFakeTime(now),
+    endTime: createFakeTime(now, TIME_DIFF),
     tripCost: `${Math.floor(Math.random() * 200)}`,
     extraServices: getAdditionalServices(true),
     favorite: Math.random() > 0.5,

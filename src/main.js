@@ -1,4 +1,4 @@
-import {renderMarkup, positionForRender} from './utils/render-markup.js';
+import {renderMarkup, PositionForRender} from './utils/render-markup.js';
 
 import TripController from './controller/trip-controller.js';
 import Menu from './components/menu.js';
@@ -9,8 +9,8 @@ import {createRouteDataCollection} from './components/create-roadmap.js';
 
 const tripMenu = document.querySelector(`.trip-main__trip-controls`);
 
-renderMarkup(tripMenu, new Menu(), positionForRender.beforeend);
-renderMarkup(tripMenu, new Filter(), positionForRender.beforeend);
+renderMarkup(tripMenu, new Menu(), PositionForRender.BEFOREEND);
+renderMarkup(tripMenu, new Filter(), PositionForRender.BEFOREEND);
 
 const routeDataCollection = createRouteDataCollection();
 

@@ -1,4 +1,4 @@
-const mockFilterData = [
+const mockFiltersData = [
   {
     inputCardId: `filter-everything`,
     inputValue: `everything`,
@@ -19,4 +19,4 @@ const mockFilterData = [
   },
 ];
 
-export {mockFilterData};
+export {mockFiltersData};
