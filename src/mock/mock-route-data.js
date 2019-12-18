@@ -3,6 +3,7 @@ import {additionalOptionsType} from '../const.js';
 const ICON_PATH = `img/icons/`;
 const MIN_QUANTITY_DESCRIPTION = 1;
 const MAX_QUANTITY_DESCRIPTION = 1;
+const TIME_DIFF = 1;
 
 const eventTypeCollection = {
   transportTypes: [
@@ -89,7 +90,6 @@ export const getAdditionalServices = (withChecks) => {
 
 const createRouteData = () => {
   const now = new Date();
-  const TIME_DIFF = 1;
   return {
     waypoint: getRandomWaypointType(eventTypeCollection),
     citiesInTheRoute: citiesToVisit,
