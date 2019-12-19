@@ -1,5 +1,5 @@
 import AbstractComponent from './abstract-class.js';
-import {mockMenuData} from '../mock/mock-menu-data.js';
+import {mockMenuTypesData} from '../mock/mock-menu-types-data.js';
 
 const createMenuMarkup = (menuData) => {
   const menuMarkupCollection = [];
@@ -18,6 +18,6 @@ const createMenu = (menuData) => (
 
 export default class Menu extends AbstractComponent {
   getTemplate() {
-    return createMenu(mockMenuData);
+    return createMenu(mockMenuTypesData);
   }
 }

@@ -1,4 +1,5 @@
 import AbstractComponent from './abstract-class.js';
+import {setFormatTime, getTripDuration, setDateTime} from '../moment.js';
 
 const createExtraServicesMarkup = (servicesData) => {
   if (servicesData.length !== 0) {
@@ -21,7 +22,8 @@ const createExtraServicesMarkup = (servicesData) => {
 };
 
 const createTripDay = (routeData) => {
-  const {estimatedTime, tripCost, extraServices, waypoint, randomCity} = routeData;
+  const {startTime, endTime, tripCost, extraServices, waypoint, randomCity} = routeData;
+  getTripDuration(startTime, endTime);
 
   return (
     `<li class="trip-events__item">
@@ -33,11 +35,11 @@ const createTripDay = (routeData) => {
 
     <div class="event__schedule">
       <p class="event__time">
-        <time class="event__start-time" datetime="${estimatedTime.dayData}T${estimatedTime.startTime}">${estimatedTime.startTime}</time>
+        <time class="event__start-time" datetime="${setDateTime(startTime)}">${setFormatTime(startTime)}</time>
         &mdash;
-        <time class="event__end-time" datetime="${estimatedTime.dayData}T${estimatedTime.endTime}">${estimatedTime.endTime}</time>
+        <time class="event__end-time" datetime="${setDateTime(endTime)}">${setFormatTime(endTime)}</time>
       </p>
-      <p class="event__duration">${estimatedTime.diffTime}</p>
+      <p class="event__duration">${getTripDuration(startTime, endTime)}</p>
     </div>
 
     <p class="event__price">

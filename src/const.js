@@ -1,7 +1,7 @@
 export const QUANTITY_OF_RENDER = 3;
 
-export const keyCodeName = {
-  escape: `Escape`,
+export const KeyCodeName = {
+  ESCAPE: `Escape`,
 };
 
 export const additionalOptionsType = [
@@ -11,3 +11,14 @@ export const additionalOptionsType = [
   {additionalName: `seats`, description: `Choose seats`, price: `5`},
   {additionalName: `travel`, description: `Travel by train`, price: `40`},
 ];
+
+export const ModeStatus = {
+  DEFAULT: `default`,
+  EDIT: `edit`,
+};
+
+export const TimeTypes = {
+  MSEC_IN_SEC: 1000,
+  MIN_IN_HOURS: 60,
+  HOURS_IN_DAY: 24,
+};

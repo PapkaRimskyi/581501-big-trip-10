@@ -9,7 +9,7 @@ const createRoute = () => (
   `
 );
 
-export default class TripInfo extends AbstractComponent {
+export default class TripInfoPoints extends AbstractComponent {
   getTemplate() {
     return createRoute();
   }

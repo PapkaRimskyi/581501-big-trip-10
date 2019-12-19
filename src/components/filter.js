@@ -1,4 +1,4 @@
-import {mockFilterData} from '../mock/mock-filter-data.js';
+import {mockFiltersData} from '../mock/mock-filters-data.js';
 import AbstractComponent from './abstract-class.js';
 
 const createFilter = (filterData) => (
@@ -18,6 +18,6 @@ const createFilter = (filterData) => (
 
 export default class Filter extends AbstractComponent {
   getTemplate() {
-    return createFilter(mockFilterData);
+    return createFilter(mockFiltersData);
   }
 }

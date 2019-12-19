@@ -4,17 +4,17 @@ export const createElement = (template) => {
   return domElement.firstChild;
 };
 
-export const positionForRender = {
-  afterbegin: `afterbegin`,
-  beforeend: `beforeend`,
+export const PositionForRender = {
+  AFTERBEGIN: `afterbegin`,
+  BEFOREEND: `beforeend`,
 };
 
 export const renderMarkup = (container, component, where) => {
   switch (where) {
-    case positionForRender.afterbegin:
+    case PositionForRender.AFTERBEGIN:
       container.prepend(component.getElement());
       break;
-    case positionForRender.beforeend:
+    case PositionForRender.BEFOREEND:
       container.append(component.getElement());
       break;
   }

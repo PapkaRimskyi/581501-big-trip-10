@@ -1,7 +1,10 @@
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
 import AbstractSmartComponent from './abstract-smart-class.js';
+import {setFormatData} from '../moment.js';
 
 const createEventAddMenu = (routeData) => {
-  const {description, placePhoto, estimatedTime, tripCost, citiesInTheRoute, waypoint, favorite, randomCity, extraServices} = routeData;
+  const {description, placePhoto, startTime, endTime, tripCost, citiesInTheRoute, waypoint, favorite, randomCity, extraServices} = routeData;
   return `<li class="trip-events__item">
   <form class="trip-events__item  event  event--edit" action="#" method="post">
   <header class="event__header">
@@ -86,12 +89,12 @@ const createEventAddMenu = (routeData) => {
       <label class="visually-hidden" for="event-start-time-1">
         From
       </label>
-      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${estimatedTime.dayData} ${estimatedTime.startTime}">
+      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${setFormatData(startTime)}">
       &mdash;
       <label class="visually-hidden" for="event-end-time-1">
         To
       </label>
-      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${estimatedTime.dayData} ${estimatedTime.endTime}">
+      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${setFormatData(endTime)}">
     </div>
 
     <div class="event__field-group  event__field-group--price">
@@ -157,10 +160,17 @@ export default class EventAddMenu extends AbstractSmartComponent {
   constructor(routeData) {
     super();
     this._routeData = routeData;
+
+    this._flatpickrs = [];
+    this._applyflatpickr();
   }
 
   getTemplate() {
     return createEventAddMenu(this._routeData);
+  }
+
+  setChangeDataHandler(handler) {
+    this.getElement().querySelector(`.event__field-group--time`).addEventListener(`change`, handler);
   }
 
   setFormClickHandler(handler) {
@@ -177,6 +187,30 @@ export default class EventAddMenu extends AbstractSmartComponent {
 
   setRouteTypeClickHandler(handler) {
     this.getElement().querySelector(`.event__type-list`).addEventListener(`click`, handler);
+  }
+
+  _applyflatpickr() {
+    if (this._flatpickrs.length !== 0) {
+      this._flatpickrs.forEach((item) => item.destroy());
+      this._flatpickrs = null;
+    }
+
+    const inputTimeCol = Array.from(this.getElement().querySelectorAll(`.event__input--time`));
+    inputTimeCol.forEach((input) => {
+      this._flatpickrs.push(flatpickr(input, {
+        enableTime: true,
+        allowInput: true,
+        defaultDate: input.id === `event-start-time-1` ? this._routeData.startTime : this._routeData.endTime,
+        dateFormat: `d/m/y H:i`,
+        // eslint-disable-next-line camelcase
+        time_24hr: true,
+      }));
+    });
+  }
+
+  rerender() {
+    super.rerender();
+    this._applyflatpickr();
   }
 
   recoveryListeners() {}
