@@ -22,71 +22,75 @@ const renderRoutes = (eventsContainer, routeDataCollection, onDataChange, onView
 };
 
 export default class TripController {
-  constructor(container) {
-    this._container = container;
+  constructor(pointsModel) {
     this._sort = new Sort();
     this._tripInfo = new TripInfoPoints();
-    this._routes = null;
+    this._tripContainer = new TripContainer();
+    this._noRouteWarning = new NoRouteWarning();
+    this._pointsModel = pointsModel;
     this._pointCollection = [];
 
     this._onDataChange = this._onDataChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
+    this._onSortTypeChange = this._onSortTypeChange.bind(this);
+
+    this._sort.setSortClickHandler(this._onSortTypeChange);
   }
 
-  render(routeDataCollection) {
-    if (routeDataCollection.length !== 0) {
-      this._routes = routeDataCollection;
+  render() {
+    if (this._pointsModel.getRoutes().length !== 0) {
+      const routes = this._pointsModel.getRoutes();
       const tripRouteInfo = document.querySelector(`.trip-main__trip-info`);
 
       renderMarkup(tripRouteInfo, this._tripInfo, PositionForRender.AFTERBEGIN);
       renderMarkup(tripEvents, this._sort, PositionForRender.AFTERBEGIN);
-      renderMarkup(tripEvents, new TripContainer(), PositionForRender.BEFOREEND);
+      renderMarkup(tripEvents, this._tripContainer, PositionForRender.BEFOREEND);
 
       const tripEventsList = tripEvents.querySelector(`.trip-events__list`);
 
+      const newRoutes = renderRoutes(tripEventsList, routes, this._onDataChange, this._onViewChange);
+      this._pointCollection = newRoutes;
 
-      this._sort.setSortClickHandler((currentSort) => {
-        let sortedRouteDataCollection = [];
-        const sortTypeNameCollection = mockSortTypesData.map((type) => type.sortName);
-        const inputSortType = this._sort.getElement().querySelector(`.trip-sort__item--${currentSort}`).querySelector(`input`);
-        inputSortType.checked = true;
-        switch (currentSort) {
-          case sortTypeNameCollection[0]:
-            sortedRouteDataCollection = routeDataCollection.slice();
-            break;
-          case sortTypeNameCollection[1]:
-            sortedRouteDataCollection = routeDataCollection.slice().sort((a, b) => parseInt(b.estimatedTime.diffTime, 10) - parseInt(a.estimatedTime.diffTime, 10));
-            break;
-          case sortTypeNameCollection[2]:
-            sortedRouteDataCollection = routeDataCollection.slice().sort((a, b) => b.tripCost - a.tripCost);
-            break;
-        }
-        tripEventsList.innerHTML = ``;
-
-        const newRoutes = renderRoutes(tripEventsList, sortedRouteDataCollection, this._onDataChange, this._onViewChange);
-        this._pointCollection = this._pointCollection.concat(newRoutes);
-      });
-
-      const newRoutes = renderRoutes(tripEventsList, routeDataCollection, this._onDataChange, this._onViewChange);
-      this._pointCollection = this._pointCollection.concat(newRoutes);
-
-      calculateRouteCost(routeDataCollection);
+      calculateRouteCost(routes);
     } else {
-      renderMarkup(tripEvents, new NoRouteWarning(), PositionForRender.BEFOREEND);
+      renderMarkup(tripEvents, this._noRouteWarning, PositionForRender.BEFOREEND);
     }
   }
 
   _onDataChange(pointController, oldRoute, newRoute) {
-    const index = this._routes.findIndex((item) => item === oldRoute);
-    if (index === -1) {
-      return;
-    }
+    const isSuccess = this._pointsModel.updateRoute(oldRoute.id, newRoute);
 
-    this._routes = [].concat(this._routes.slice(0, index), newRoute, this._routes.slice(index + 1));
-    pointController.render(this._routes[index]);
+    if (isSuccess) {
+      pointController.render(newRoute);
+    }
   }
 
   _onViewChange() {
     this._pointCollection.map((item) => item.setDefaultView());
+  }
+
+  _onSortTypeChange(currentSort) {
+    let sortedRouteDataCollection = [];
+    const routes = this._pointsModel.getRoutes();
+    const sortTypeNameCollection = mockSortTypesData.map((type) => type.sortName);
+    const inputSortType = this._sort.getElement().querySelector(`.trip-sort__item--${currentSort}`).querySelector(`input`);
+    inputSortType.checked = true;
+    switch (currentSort) {
+      case sortTypeNameCollection[0]:
+        sortedRouteDataCollection = routes.slice();
+        break;
+      case sortTypeNameCollection[1]:
+        sortedRouteDataCollection = routes.slice().sort((a, b) => parseInt(b.estimatedTime.diffTime, 10) - parseInt(a.estimatedTime.diffTime, 10));
+        break;
+      case sortTypeNameCollection[2]:
+        sortedRouteDataCollection = routes.slice().sort((a, b) => b.tripCost - a.tripCost);
+        break;
+    }
+    const tripEventsList = tripEvents.querySelector(`.trip-events__list`);
+
+    tripEventsList.innerHTML = ``;
+
+    const newRoutes = renderRoutes(tripEventsList, sortedRouteDataCollection, this._onDataChange, this._onViewChange);
+    this._pointCollection = newRoutes;
   }
 }

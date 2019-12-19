@@ -1,5 +1,6 @@
 import {renderMarkup, PositionForRender} from './utils/render-markup.js';
 
+import Points from './models/points.js';
 import TripController from './controller/trip-controller.js';
 import Menu from './components/menu.js';
 import Filter from './components/filter.js';
@@ -14,5 +15,8 @@ renderMarkup(tripMenu, new Filter(), PositionForRender.BEFOREEND);
 
 const routeDataCollection = createRouteDataCollection();
 
-const tripConroller = new TripController();
-tripConroller.render(routeDataCollection);
+const pointsInstance = new Points();
+pointsInstance.setRoutes(routeDataCollection);
+
+const tripConroller = new TripController(pointsInstance);
+tripConroller.render();

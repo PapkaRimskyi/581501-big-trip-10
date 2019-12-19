@@ -91,6 +91,7 @@ export const getAdditionalServices = (withChecks) => {
 const createRouteData = () => {
   const now = new Date();
   return {
+    id: String(new Date() + Math.random()),
     waypoint: getRandomWaypointType(eventTypeCollection),
     citiesInTheRoute: citiesToVisit,
     randomCity: citiesToVisit[getNumberBetweenMinMax(0, citiesToVisit.length - 1)],
