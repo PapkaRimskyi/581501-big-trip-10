@@ -1,4 +1,4 @@
-import {mockFiltersData} from '../mock/mock-filters-data.js';
+// import {mockFiltersData} from '../mock/mock-filters-data.js';
 import AbstractComponent from './abstract-class.js';
 
 const createFilter = (filterData) => (
@@ -17,7 +17,24 @@ const createFilter = (filterData) => (
 );
 
 export default class Filter extends AbstractComponent {
+  constructor(mockFiltersData) {
+    super();
+    this._mockFiltersData = mockFiltersData;
+    this._filter = null;
+  }
+
   getTemplate() {
-    return createFilter(mockFiltersData);
+    return createFilter(this._mockFiltersData);
+  }
+
+  setFilterContainerHandler(handler) {
+    this.getElement().addEventListener(`click`, (evt) => {
+      if (evt.target.tagName === `INPUT` && evt.target.checked) {
+        if (this._filter !== evt.target) {
+          this._filter = evt.target;
+          handler(this._filter.value);
+        }
+      }
+    });
   }
 }

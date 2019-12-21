@@ -21,7 +21,7 @@ module.exports = {
     // eslint-disable-next-line
     contentBase: path.join(__dirname, `public`),
     watchContentBase: true,
-    port: 8082,
+    port: 8081,
     open: true,
   },
   plugins: [

@@ -22,3 +22,11 @@ export const TimeTypes = {
   MIN_IN_HOURS: 60,
   HOURS_IN_DAY: 24,
 };
+
+export const FilterTypes = {
+  EVERYTHING: `everything`,
+  FUTURE: `future`,
+  PAST: `past`,
+};
+
+export const MONTHS = [`JANUARY`, `FEBRUARY`, `MARCH`, `APRIL`, `MAY`, `JUNE`, `JULY`, `AUGUST`, `SEPTEMBER`, `OCTOBER`, `NOVEMBER`, `DECEMBER`];

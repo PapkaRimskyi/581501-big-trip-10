@@ -32,9 +32,13 @@ export default class TripController {
 
     this._onDataChange = this._onDataChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
+
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
 
+    this._tripEventsList = null;
+
     this._sort.setSortClickHandler(this._onSortTypeChange);
+    this._pointsModel.tripHandler = this._onFilterTypeChange.bind(this);
   }
 
   render() {
@@ -46,9 +50,9 @@ export default class TripController {
       renderMarkup(tripEvents, this._sort, PositionForRender.AFTERBEGIN);
       renderMarkup(tripEvents, this._tripContainer, PositionForRender.BEFOREEND);
 
-      const tripEventsList = tripEvents.querySelector(`.trip-events__list`);
+      this._tripEventsList = tripEvents.querySelector(`.trip-events__list`);
 
-      const newRoutes = renderRoutes(tripEventsList, routes, this._onDataChange, this._onViewChange);
+      const newRoutes = renderRoutes(this._tripEventsList, routes, this._onDataChange, this._onViewChange);
       this._pointCollection = newRoutes;
 
       calculateRouteCost(routes);
@@ -86,11 +90,19 @@ export default class TripController {
         sortedRouteDataCollection = routes.slice().sort((a, b) => b.tripCost - a.tripCost);
         break;
     }
-    const tripEventsList = tripEvents.querySelector(`.trip-events__list`);
 
-    tripEventsList.innerHTML = ``;
+    this._tripEventsList.innerHTML = ``;
 
-    const newRoutes = renderRoutes(tripEventsList, sortedRouteDataCollection, this._onDataChange, this._onViewChange);
+    const newRoutes = renderRoutes(this._tripEventsList, sortedRouteDataCollection, this._onDataChange, this._onViewChange);
     this._pointCollection = newRoutes;
+  }
+
+  _onFilterTypeChange() {
+    this._tripEventsList.innerHTML = ``;
+    const filteredRoutes = this._pointsModel.getRoutes().filter((item) => item !== undefined ? item : false);
+    if (filteredRoutes.length) {
+      const newRoutes = renderRoutes(this._tripEventsList, filteredRoutes, this._onDataChange, this._onViewChange);
+      this._pointCollection = newRoutes;
+    }
   }
 }

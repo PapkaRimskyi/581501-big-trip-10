@@ -1,7 +1,6 @@
-import {TimeTypes} from './const.js';
+import {TimeTypes, MONTHS} from './const.js';
 
 import moment from 'moment';
-moment.locale(`ru`);
 
 const DOUBLE_NUMBER = 10;
 const MIN_HOUR = 1;
@@ -31,6 +30,15 @@ export const getTripDuration = (startDate, endDate) => {
   }
 };
 
-export const setDateTime = (data) => {
-  return moment(data).format(`YYYY-MM-DD HH:mm`).split(` `).join(`T`);
+export const setDateTime = (data, withTime = true) => {
+  if (withTime) {
+    return moment(data).format(`YYYY-MM-DD HH:mm`).split(` `).join(`T`);
+  }
+  return moment(data).format(`YYYY-MM-DD`);
+};
+
+export const getMonthAndDay = (dateTime) => {
+  const dayData = dateTime.split(`-`);
+  const monthNumber = dayData[1] < DOUBLE_NUMBER ? dayData[1].substr(1) : dayData[1];
+  return `${MONTHS[monthNumber - 1].slice(0, 3)} ${dayData[2]}`;
 };
