@@ -42,6 +42,12 @@ export default class PointController {
       document.removeEventListener(`keydown`, editFormEscHandler);
     });
 
+    this._routeEventAddMenuComponent.setDeleteFormClickHandler(() => {
+      this._onDataChange(this, routeData, null);
+      this._checkDayRouteCount();
+      document.removeEventListener(`keydown`, editFormEscHandler);
+    });
+
     this._routeEventAddMenuComponent.setChangeDataHandler(() => {
       const startTimeInput = document.getElementById(`event-start-time-1`);
       const endTimeInput = document.getElementById(`event-end-time-1`);
@@ -102,6 +108,12 @@ export default class PointController {
   setDefaultView() {
     if (this._mode !== ModeStatus.DEFAULT) {
       this._replaceFormToCard();
+    }
+  }
+
+  _checkDayRouteCount() {
+    if (!this._container.children.length) {
+      this._container.parentNode.remove();
     }
   }
 }

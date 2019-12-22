@@ -13,7 +13,6 @@ import FilterController from './controller/filter-controller.js';
 const tripMenu = document.querySelector(`.trip-main__trip-controls`);
 
 renderMarkup(tripMenu, new Menu(), PositionForRender.BEFOREEND);
-// renderMarkup(tripMenu, new Filter(), PositionForRender.BEFOREEND);
 
 const routeDataCollection = createRouteDataCollection();
 

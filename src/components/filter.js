@@ -1,4 +1,3 @@
-// import {mockFiltersData} from '../mock/mock-filters-data.js';
 import AbstractComponent from './abstract-class.js';
 
 const createFilter = (filterData) => (

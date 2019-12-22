@@ -23,7 +23,9 @@ const createSort = (sortData) => (
 export default class Sort extends AbstractComponent {
   constructor() {
     super();
-    this._currentSortType = mockSortTypesData.find((item) => item.checked ? item : false).sortName;
+    this._currentSortType = this.findCurrentSortType();
+
+    this.setToDefaultSortType = this.setToDefaultSortType.bind(this);
   }
 
   getTemplate() {
@@ -44,5 +46,14 @@ export default class Sort extends AbstractComponent {
       }
       return;
     });
+  }
+
+  findCurrentSortType() {
+    return mockSortTypesData.find((item) => item.checked).sortName;
+  }
+
+  setToDefaultSortType() {
+    this._currentSortType = Array.from(this.getElement().querySelectorAll(`.trip-sort__input`)).find((item) => item.value.includes(`time`)).checked = true;
+    this._currentSortType = this.findCurrentSortType();
   }
 }

@@ -3,27 +3,26 @@ import moment from 'moment';
 
 export default class Points {
   constructor() {
-    this._routes = null;
-    this._routesFuture = [];
-    this._routesPast = [];
+    this._defaultRoutes = null;
+    this._filteredRoutes = null;
 
     this._filterName = FilterTypes.EVERYTHING;
     this.getFilterName = this.getFilterName.bind(this);
 
-    this.tripHandler = null;
+    this.tripControllerFilterHandler = null;
   }
 
   getRoutes() {
     const dateToday = new Date().getDate();
     switch (this._filterName) {
       case FilterTypes.EVERYTHING:
-        return this._routes;
+        return this._defaultRoutes;
       case FilterTypes.FUTURE:
-        this._routesFutute = this._routes.map((item) => moment(item.startTime).format(`DD`) >= dateToday ? item : null);
-        return this._routesFutute;
+        this._filteredRoutes = this._defaultRoutes.map((item) => moment(item.startTime).format(`DD`) >= dateToday ? item : null);
+        return this._filteredRoutes;
       case FilterTypes.PAST:
-        this._routesPast = this._routes.map((item) => moment(item.startTime).format(`DD`) < dateToday ? item : undefined);
-        return this._routesPast;
+        this._filteredRoutes = this._defaultRoutes.map((item) => moment(item.startTime).format(`DD`) < dateToday ? item : null);
+        return this._filteredRoutes;
     }
     return null;
   }
@@ -33,22 +32,25 @@ export default class Points {
   }
 
   setRoutes(routeCollection) {
-    this._routes = routeCollection;
+    this._defaultRoutes = routeCollection;
   }
 
   updateRoute(oldRouteId, newRoute) {
-    const index = this._routes.findIndex((item) => item.id === oldRouteId);
+    const index = this._defaultRoutes.findIndex((item) => item.id === oldRouteId);
     if (index === -1) {
       return false;
     }
-
-    this._routes = [].concat(this._routes.slice(0, index), newRoute, this._routes.slice(index + 1));
-
-    return true;
+    if (newRoute) {
+      this._defaultRoutes = [].concat(this._defaultRoutes.slice(0, index), newRoute, this._defaultRoutes.slice(index + 1));
+      return true;
+    } else {
+      this._defaultRoutes = [].concat(this._defaultRoutes.slice(0, index), this._defaultRoutes.slice(index + 1));
+      return false;
+    }
   }
 
   getFilterName(filterName) {
     this._filterName = filterName;
-    this.tripHandler();
+    this.tripControllerFilterHandler();
   }
 }

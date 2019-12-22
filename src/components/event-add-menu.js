@@ -106,7 +106,7 @@ const createEventAddMenu = (routeData) => {
     </div>
 
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-    <button class="event__reset-btn" type="reset">Cancel</button>
+    <button class="event__reset-btn" type="reset">Delete</button>
 
     <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${favorite === true ? `checked` : ``}>
     <label class="event__favorite-btn" for="event-favorite-1">
@@ -177,6 +177,13 @@ export default class EventAddMenu extends AbstractSmartComponent {
     this.getElement().querySelector(`form`).addEventListener(`submit`, handler);
   }
 
+  setDeleteFormClickHandler(handler) {
+    this.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, () => {
+      this.getElement().remove();
+      handler();
+    });
+  }
+
   setFavotireClickHandler(handler) {
     this.getElement().querySelector(`.event__favorite-btn`).addEventListener(`click`, handler);
   }
@@ -195,8 +202,8 @@ export default class EventAddMenu extends AbstractSmartComponent {
       this._flatpickrs = null;
     }
 
-    const inputTimeCol = Array.from(this.getElement().querySelectorAll(`.event__input--time`));
-    inputTimeCol.forEach((input) => {
+    const inputTimeCollection = Array.from(this.getElement().querySelectorAll(`.event__input--time`));
+    inputTimeCollection.forEach((input) => {
       this._flatpickrs.push(flatpickr(input, {
         enableTime: true,
         allowInput: true,

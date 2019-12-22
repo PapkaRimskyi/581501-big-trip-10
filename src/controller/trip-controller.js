@@ -38,7 +38,7 @@ export default class TripController {
     this._tripEventsList = null;
 
     this._sort.setSortClickHandler(this._onSortTypeChange);
-    this._pointsModel.tripHandler = this._onFilterTypeChange.bind(this);
+    this._pointsModel.tripControllerFilterHandler = this._onFilterTypeChange.bind(this);
   }
 
   render() {
@@ -63,9 +63,10 @@ export default class TripController {
 
   _onDataChange(pointController, oldRoute, newRoute) {
     const isSuccess = this._pointsModel.updateRoute(oldRoute.id, newRoute);
-
     if (isSuccess) {
       pointController.render(newRoute);
+    } else {
+      this._pointsModel._defaultRoutes.forEach((item) => pointController.render(item));
     }
   }
 
@@ -75,7 +76,7 @@ export default class TripController {
 
   _onSortTypeChange(currentSort) {
     let sortedRouteDataCollection = [];
-    const routes = this._pointsModel.getRoutes();
+    const routes = this._pointsModel.getRoutes().filter((item) => item !== null ? item : false);
     const sortTypeNameCollection = mockSortTypesData.map((type) => type.sortName);
     const inputSortType = this._sort.getElement().querySelector(`.trip-sort__item--${currentSort}`).querySelector(`input`);
     inputSortType.checked = true;
@@ -99,10 +100,8 @@ export default class TripController {
 
   _onFilterTypeChange() {
     this._tripEventsList.innerHTML = ``;
-    const filteredRoutes = this._pointsModel.getRoutes().filter((item) => item !== undefined ? item : false);
-    if (filteredRoutes.length) {
-      const newRoutes = renderRoutes(this._tripEventsList, filteredRoutes, this._onDataChange, this._onViewChange);
-      this._pointCollection = newRoutes;
-    }
+    this._sort.setToDefaultSortType();
+    const newRoutes = renderRoutes(this._tripEventsList, this._pointsModel.getRoutes(), this._onDataChange, this._onViewChange);
+    this._pointCollection = newRoutes;
   }
 }
